@@ -1,6 +1,6 @@
 *.png
 *.csv
 *.txt
-
+venv/*
 /data
 /assets
