@@ -1,4 +1,4 @@
-documentclass[11pt]{article}
+\documentclass[11pt]{article}
 
 % --- Packages ---
 \usepackage[utf8]{inputenc}
@@ -13,19 +13,38 @@ documentclass[11pt]{article}
 
 \title{EVAC1 part 1}
 \date{}
+\author{}
 
 \begin{document}
 
 \maketitle
 
-\section{Justification of Representation and Algorithm}
+\section{Justification of Representation and Algorithm 331 Words} 
+\paragraph{}
+I chose to represent the problem as a single-objective constrained optimisation, where the nutrient and portion constraints are handled with dynamic penalties.
+Penalties are calculated relative to how hard the restriction is broken i.e. being 5 calories under carries a larger penalty than 1 under.
+This creates a gradient in the fitness which allows the algorithm to work towards a region with passing solutions, rather than simply failing for breaking constraints.
+Each individual is represented by a vector of real values, which themselves represent the quantity of each food item in their diet.
+I chose to represent the food portions as real values, as it closely aligned with the provided constraints;
+real-valued representation allows the algorithm to explore the search space with the required precision to find an acceptible solution that does not violate any constraints.
+Also the specification states the solution must have at least 0.5 units of fish, which leads to the assumption that food units cannot be considered as integers.
+\paragraph{}
+The $\mu+\lambda$ algorithm was chosen because it is elitist. 
+In a search space with hard constraints, preserving feasible solutions across generations is essential to prevent the loss of high fitness solutions. 
+Also by retaining feasible solutions thorughout generations the algorithm can concentrate it's search in a smaller search space primarily filled with feasible solutions. 
+A hall of fame is also utilised to ensure we take the very best individual found once the algorithm is complete.
+\paragraph{}
+Tournament selection was chosen as it can appropriately handle the potential disaparity in fitness created by the penalties. 
+Unlike a fitness proportional solution which can cause a population to stagnate when one individual is significantly better than the rest, 
+the relative ranking of tournament selection maintains a constant selection pressure.
+Constant selection pressure helps to avoid the case where a single okay individual dominates, as all other solutions fail on constaints and thus have exceptionally high fitness.
+Blend crossover and Guassian Mutation were chosen since food portions are continuous.
+\section{Investigation of Parameters X Words}
+\paragraph{}
+In order to account for the stocastic nature of genetic algorithms, for each parameter setting 30 independant tests are conducted. 
 
-\section{Investigation of Parameters}
-
-Need to investigate parameters
-
-\section{Evaluation of Solution}
-
+\section{Evaluation of Solution X Words}
+\paragraph{}
 Very good
 
 \end{document}
