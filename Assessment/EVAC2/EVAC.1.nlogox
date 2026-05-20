@@ -4,6 +4,37 @@
   pi_A pi_O pi_M pi_AVG 
 ]
 
+to reset-policy-attributes
+  set A_E 3
+  set A_I 1
+  set A_S 2
+  set A_C 1
+  
+  set O_E 1
+  set O_I 2
+  set O_S 1
+  set O_C 3
+  
+  set M_E 1
+  set M_I 3
+  set M_S 2
+  set M_C 1
+end
+
+to setup-task1
+  set w_E 0.15
+  set w_I 0.5
+  set w_S 0.2
+  set w_C 0.15
+end
+
+to setup-task2
+  set w_E 0.55
+  set w_I 0.05
+  set w_S 0.25
+  set w_C 0.15
+end
+
 to setup 
   clear-all 
   set x_A 1 / 3
@@ -88,7 +119,7 @@ end</code>
   <widgets>
     <view x="445" wrappingAllowedX="false" y="10" frameRate="30.0" minPycor="-24" height="563" showTickCounter="true" patchSize="13.0" fontSize="10" wrappingAllowedY="false" width="641" tickCounterLabel="ticks" maxPycor="18" updateMode="0" maxPxcor="24" minPxcor="-24"></view>
     <note x="10" y="10" backgroundDark="0" fontSize="12" width="235" markdown="false" height="25" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">GLOBAL VARIABLES</note>
-    <slider x="10" step="0.05" y="40" max="1" width="235" display="delta_t" height="50" min="0" direction="Horizontal" default="0.5" variable="delta_t"></slider>
+    <slider x="10" step="0.05" y="40" max="1" width="235" display="delta_t" height="50" min="0" direction="Horizontal" default="0.05" variable="delta_t"></slider>
     <monitor x="250" precision="17" y="10" height="80" fontSize="11" width="190" display="Sum of weights (must be = 1)">w_E + w_I + w_C + w_S</monitor>
     <slider x="10" step="0.05" y="205" max="1" width="430" display="w_C" height="50" min="0" direction="Horizontal" default="0.15" variable="w_C"></slider>
     <slider x="10" step="0.05" y="260" max="1" width="430" display="w_S" height="50" min="0" direction="Horizontal" default="0.2" variable="w_S"></slider>
@@ -102,10 +133,10 @@ end</code>
     <slider x="10" step="1" y="650" max="3" width="430" display="O_I" height="50" min="0" direction="Horizontal" default="2.0" variable="O_I"></slider>
     <slider x="10" step="1" y="705" max="3" width="430" display="O_C" height="50" min="0" direction="Horizontal" default="3.0" variable="O_C"></slider>
     <slider x="10" step="1" y="760" max="3" width="430" display="O_S" height="50" min="0" direction="Horizontal" default="1.0" variable="O_S"></slider>
-    <slider x="10" step="1" y="845" max="3" width="430" display="M_E" height="50" min="0" direction="Horizontal" default="2.0" variable="M_E"></slider>
+    <slider x="10" step="1" y="845" max="3" width="430" display="M_E" height="50" min="0" direction="Horizontal" default="1.0" variable="M_E"></slider>
     <slider x="10" step="1" y="900" max="3" width="430" display="M_I" height="50" min="0" direction="Horizontal" default="3.0" variable="M_I"></slider>
     <slider x="10" step="1" y="955" max="3" width="430" display="M_C" height="50" min="0" direction="Horizontal" default="1.0" variable="M_C"></slider>
-    <slider x="10" step="1" y="1010" max="3" width="430" display="M_S" height="50" min="0" direction="Horizontal" default="1.0" variable="M_S"></slider>
+    <slider x="10" step="1" y="1010" max="3" width="430" display="M_S" height="50" min="0" direction="Horizontal" default="2.0" variable="M_S"></slider>
     <note x="10" y="815" backgroundDark="0" fontSize="12" width="430" markdown="false" height="25" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">DEMOCRACY VARIABLES</note>
     <slider x="10" step="0.05" y="95" max="1" width="430" display="w_E" height="50" min="0" direction="Horizontal" default="0.15" variable="w_E"></slider>
     <slider x="10" step="0.05" y="150" max="1" width="430" display="w_I" height="50" min="0" direction="Horizontal" default="0.5" variable="w_I"></slider>
@@ -127,17 +158,27 @@ end</code>
         <update>plot x_M</update>
       </pen>
     </plot>
+    <button x="1150" y="10" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="85">setup-task1</button>
+    <button x="1240" y="10" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="85">setup-task2</button>
+    <button x="1150" y="55" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="140">reset-policy-attributes</button>
   </widgets>
   <info># EVAC Part 2
 
-The default scores have been decided based on the given starting point where high = 3 or 2, medium = 2 or 1 and low is 0 or 1. All scores have been made to sum to 7.
+The default scores have been decided based on the given starting point where high = 3 or 2, medium = 2 or 1 and low is 0 or 1. All scores have been made to sum to 7. No 0 values have been used
 
 ## Task 1
-See images labelled BLANK and BLANK.
+[TASK1_Ternary](file:TASK1_Ternary.png) and [TASK1_SharesOverTime](file:TASK1_SharesOverTime.png) are the diagrams for this task
 
+In this environment, democracy is quickly dominant. The ternary diagram shows a small curve towards oligarchy, and we can see in the shares over time diagram that oligarchy decreases slower than autocracy. 
 
+Policy payoffs are calculated as a weighted sum of the environment's weights and the corresponding attributes in each policy. The environment places the largest emphasis on innovation, giving it a weight of 0.5. This creates a selection pressure that favours policies with larger innovation attributes like democracy, which has an innovation attribute of 3. This results in democracy being dominant over the other two policies. Oligarchy has the second highest innovation, which explains why its population shrank slower than autocracy.
 
 ## Task 2
+[TASK2_Ternary](file:TASK2_Ternary.png) and [TASK2_SharesOverTime](file:TASK2_SharesOverTime.png) are the diagrams for this task 
+
+In this environment, autocracy is immediately dominant. Both other policies immediately disappear at the same rate.
+
+The shift from Task 1 is driven by the change in selection pressure. By raising the importance of external power from 0.15 to 0.55  and reducing innovation importance from 0.5 to 0.05, the environment now rewards security over innovation. Autocracy now has the highest fitness due to its large external power attribute of 3. Democracy falls behind due to its low external power attribute of 1 and because it loses the innovation advantage that it had in task 1. Oligarchy also has an security attribute of 1, which explains why there is no curve in the ternary diagram, this time.
 
 ## Task 3
 
